@@ -1,0 +1,14 @@
+# Secrets
+.env
+*.pem
+
+# Local data
+prometheus-data/
+grafana-data/
+alertmanager-data/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+*.swp

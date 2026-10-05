@@ -1,0 +1,8 @@
+# Hosts running node_exporter (port 9100). Add one entry per EC2 instance.
+# Use private IPs when Prometheus runs in the same VPC.
+- targets:
+    - host.docker.internal:9100   # the monitoring host itself
+    # - 10.0.1.25:9100
+    # - 10.0.2.37:9100
+  labels:
+    env: dev

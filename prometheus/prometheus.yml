@@ -1,0 +1,41 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - /etc/prometheus/alerts.yml
+
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: ["alertmanager:9093"]
+
+scrape_configs:
+  - job_name: prometheus
+    static_configs:
+      - targets: ["localhost:9090"]
+
+  # Hosts listed in prometheus/targets/node.yml (edit the file, no restart needed).
+  - job_name: node
+    file_sd_configs:
+      - files:
+          - /etc/prometheus/targets/node.yml
+        refresh_interval: 1m
+
+  # --- Optional: auto-discover EC2 instances instead of listing them by hand ---
+  # Attach an IAM role with ec2:DescribeInstances to this host, then uncomment.
+  # Only instances tagged Monitoring=true are scraped.
+  #
+  # - job_name: ec2-node
+  #   ec2_sd_configs:
+  #     - region: ap-south-1
+  #       port: 9100
+  #       filters:
+  #         - name: tag:Monitoring
+  #           values: ["true"]
+  #   relabel_configs:
+  #     - source_labels: [__meta_ec2_tag_Name]
+  #       target_label: instance_name
+  #     - source_labels: [__meta_ec2_private_ip]
+  #       target_label: instance
+  #       replacement: "$1:9100"
